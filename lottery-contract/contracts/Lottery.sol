@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.13;
 
-contract Lottery{
+contract lottery{
     address public manager;
     address[] public players;
 

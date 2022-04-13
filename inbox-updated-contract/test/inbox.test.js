@@ -1,7 +1,6 @@
 const assert = require('assert');
 const ganache = require('ganache-cli');
 const Web3 = require('Web3');
-const HDWalletProvider = require('@truffle/hdwallet-provider');
 const{ abi, evm } = require('../compile');
 
 
