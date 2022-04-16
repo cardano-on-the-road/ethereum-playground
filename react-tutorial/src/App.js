@@ -1,40 +1,56 @@
 import './App.css';
-import credential from './credentials.json';
 import SearchBar from './components/searchBar/searchBar';
 import VideoList from './components/videoList/videoList';
-import YTSearch from 'youtube-search';
+import VideoDetail from './components/videoDetail/videoDetail';
 import axios from 'axios'
 import React, {Component} from 'react';
+import './css/style.css'
 
 class App extends Component {
   
   constructor(props){
     super(props);
 
-    var opts = {
-      maxResults: 10,
-      key: credential.googleApiKey
+    this.state = {
+      episodes: [],
+      episodeSelected: null
     };
 
-    this.state = {episodes: []};
+  }
 
+  componentDidMount(){
     axios.get('https://rickandmortyapi.com/api/episode')
     .then(resp => {
-      this.state = {episodes: resp.data.results}
+      const es = this.downloadEpisode(resp.data.results[0].url);
+      console.log('ES',es);
+      this.setState({
+        episodes: resp.data.results,
+        episodeSelected: this.downloadEpisode(resp.data.results[0].url)
+      });
+      this.downloadEpisode();
     });
-    console.log(this.state.episodes)
-    // YTSearch('valerio mellini', opts, (err, videos) => {
-    //   if(err) return console.log(err);
-    //   this.state = { videos };
-    // });
+  }
+
+  async downloadEpisode(url){
+    try{
+      const response = await axios.get(url)
+      console.log('Download episode', response.data);
+      this.setState({episodeSelected: response.data});
+    } catch (err){
+      console.log(err);
+    }
   }
 
   render(){
     return (
       <div>
         <SearchBar />
-        {console.log(this.state.episodes)}
-        <VideoList videos = {this.state.episodes} />
+        {console.log('APP episodes', this.state.episodes)}
+        {console.log('APP episode selected', this.state.episodeSelected)}
+        <VideoDetail video = {this.state.episodeSelected}/>
+        <VideoList
+          onSelectedEpisode = {url => this.downloadEpisode(url)} 
+          videos = {this.state.episodes} />
       </div>
     );
   }

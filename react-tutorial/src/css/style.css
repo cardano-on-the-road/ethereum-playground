@@ -1,0 +1,11 @@
+.video-detail{
+    border: 1px;
+}
+
+.video-list{
+    cursor: pointer;
+}
+
+.video-element:hover{
+    background-color: #ddd;
+}
