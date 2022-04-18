@@ -10,6 +10,7 @@ class AccountDetails extends Component {
                     <div style={{backgroundColor: 'lightblue'}}>
                         <p> Account: {this.props.accountConnected} </p>
                         <p> Balance: {this.props.accountBalance} </p>
+                        <p> Version: 1.00</p>
                     </div>
                 </>
             );
