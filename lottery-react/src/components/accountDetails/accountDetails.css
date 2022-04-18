@@ -1,0 +1,26 @@
+.accountBalance-main-div
+{
+    display: 'flex';
+    /*background-color: lightblue;*/
+    border-radius: 25px;
+    height: 20rem;
+    background-repeat: no-repeat;}
+
+.accountBalance-main-div-card
+{
+    border-radius: 25px;
+    background: url("../../images/card-edit.png");
+    height: 300px;
+    width: 474px;
+    background-repeat: no-repeat;
+}
+
+.accountBalance-div-p
+{
+    color: white;
+    margin-left: 2.4rem;
+    font-size: small;
+    background-color: black;
+    height: 1.5rem;
+    width: 80%;
+}
