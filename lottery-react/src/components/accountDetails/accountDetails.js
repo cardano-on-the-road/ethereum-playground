@@ -7,7 +7,7 @@ class AccountDetails extends Component {
         if (this.props.accountConnected !== '') {
             return (
                 <>
-                    <div style={{backgroundColor: 'lightblue'}}>
+                    <div style={{backgroundColor: 'orange'}}>
                         <p> Account: {this.props.accountConnected} </p>
                         <p> Balance: {this.props.accountBalance} </p>
                         <p> Version: 1.00</p>
