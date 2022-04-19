@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import ConnectButton from './components/connectButton/connectButton'
 import AccountDetails from './components/accountDetails/accountDetails';
+import contractInterface from './contractInterface'
 import Web3 from 'web3';
-//import lottery from './lottery';
+//import contractInterfacetery from './contractInterfacetery';
 
 class App extends Component {
 
@@ -10,20 +11,29 @@ class App extends Component {
     super(props);
 
     this.state = {
-      web3: null
+      web3: null,
+      accountsConnected: [],
+      connectionStatus: 'Not connected',
+      accountBalance: 0,
+      lottery: null
     }
 
-    this.accountConnected = '';
-    this.connectionStatus = 'Not connected';
-    this.accountBalance = 0;
+    console.log(contractInterface.contractAddress, '\n', contractInterface.abi);
   }
 
-  async componentDidUpdate() {
-    if (this.state.web3) {
-      this.accountConnected = await this.state.web3.eth.getAccounts();
-      const weiBalance = await this.state.web3.eth.getBalance(this.accountConnected[0]);
-      this.accountBalance = Web3.utils.fromWei(weiBalance, 'ether');
-      this.connectionStatus = 'Connected';
+  async componentDidUpdate(prevProp, prevState) {
+    if (this.state.web3 && prevState.web3 == null) {
+      console.log('old state', prevState.web3)
+      const accounts = await this.state.web3.eth.getAccounts()
+      this.setState({ accountsConnected: accounts });
+      const weiBalance = await this.state.web3.eth.getBalance(accounts[0]);
+      this.setState({ accountBalance: Web3.utils.fromWei(weiBalance, 'ether') });
+      this.setState({ connectionStatus: 'Connected' });
+      // init contract
+      this.setState({
+        lottery: new this.state.web3.eth.Contract(contractInterface.abi, contractInterface.contractAddress)
+      });
+      console.log('web', this.state.web3, '\nAccount connected', this.state.accountsConnected[0], '\nAccount balance', this.state.accountBalance);
     }
   }
 
@@ -32,8 +42,10 @@ class App extends Component {
       <>
         <div>
           <ConnectButton onConnect={(web3 => this.setState({ web3 }))} />
-          <AccountDetails accountBalance={this.accountBalance}
-            accountConnected={this.accountConnected} />
+          <AccountDetails 
+            connectionStatus={this.state.connectionStatus}
+            accountBalance={this.state.accountBalance}
+            accountConnected={this.state.accountsConnected[0]} />
         </div>
       </>
     );

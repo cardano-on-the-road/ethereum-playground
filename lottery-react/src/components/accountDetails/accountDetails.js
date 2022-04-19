@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import '../../css/accountDetails.css';
 
 class AccountDetails extends Component {
 
@@ -8,6 +9,7 @@ class AccountDetails extends Component {
             return (
                 <>
                     <div style={{backgroundColor: 'orange'}}>
+                        <p> Connection status: {this.props.connectionStatus}</p>
                         <p> Account: {this.props.accountConnected} </p>
                         <p> Balance: {this.props.accountBalance} </p>
                         <p> Version: 1.00</p>
