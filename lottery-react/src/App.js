@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ConnectButton from './components/connectButton/connectButton'
 import AccountDetails from './components/accountDetails/accountDetails';
 import contractInterface from './contractInterface'
+import ContractComponent from './components/contractComponent/ContractComponent';
 import Web3 from 'web3';
 //import contractInterfacetery from './contractInterfacetery';
 
@@ -22,7 +23,7 @@ class App extends Component {
   }
 
   async componentDidUpdate(prevProp, prevState) {
-    if (this.state.web3 && prevState.web3 == null) {
+    if ((this.state.web3 && prevState.web3 == null)) {
       console.log('old state', prevState.web3)
       const accounts = await this.state.web3.eth.getAccounts()
       this.setState({ accountsConnected: accounts });
@@ -42,10 +43,13 @@ class App extends Component {
       <>
         <div>
           <ConnectButton onConnect={(web3 => this.setState({ web3 }))} />
-          <AccountDetails 
+          <AccountDetails
             connectionStatus={this.state.connectionStatus}
             accountBalance={this.state.accountBalance}
             accountConnected={this.state.accountsConnected[0]} />
+          <ContractComponent lottery={this.state.lottery}
+            accountConnected={this.state.accountsConnected}
+            web3={this.state.web3} />
         </div>
       </>
     );
