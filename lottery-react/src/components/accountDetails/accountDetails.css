@@ -8,8 +8,10 @@
 
 .accountBalance-main-div-card
 {
+    display: flex;
+    flex-direction: column;
     border-radius: 25px;
-    background: url("../../images/card-edit.png");
+    background: url("../../images/red-credit-card-edit.jpeg");
     height: 300px;
     width: 474px;
     background-repeat: no-repeat;
@@ -18,9 +20,11 @@
 .accountBalance-div-p
 {
     color: white;
-    margin-left: 2.4rem;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
     font-size: small;
-    background-color: black;
     height: 1.5rem;
-    width: 80%;
+    width: 100%;
+    font-weight: bold;
+    font-size: medium;
 }
