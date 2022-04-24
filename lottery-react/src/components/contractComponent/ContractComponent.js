@@ -6,18 +6,32 @@ class ContractComponent extends Component {
         super(props);
 
         this.state = {
-            manager: '',
+            manager: '0x11111',
+            accountConnected: '0x00000',
             players: [],
             balance: '0',
             value: 0,
-            message: ''
+            message: '',
+            winnerMessage: '',
+            pickWinnerDiv:''
         }
     }
 
     async componentDidUpdate(prevProps, prevState) {
-        if (this.props.lottery && this.state.manager === '') {
+        if (this.props.lottery && this.state.manager === '0x11111') {
             const manager = await this.props.lottery.methods.manager().call();
+            const accountConnected = this.props.accountConnected[0];
             this.setState({ manager });
+            this.setState({ accountConnected})
+            if(manager === accountConnected){
+                const pickWinnerDiv = () =>  {return (<>
+                    <h4> Ready to extract a winner? </h4>
+                    <button onClick={this.onClick}>Pick a winner</button>
+                    <p>{this.state.winnerMessage}</p>
+                </>)}
+                this.setState({pickWinnerDiv: pickWinnerDiv()})
+            }
+
         }
         if (this.props.lottery) {
             const players = await this.props.lottery.methods.getPlayers().call();
@@ -34,12 +48,24 @@ class ContractComponent extends Component {
             this.setState({ 'message': 'Waiting for transaction execution' });
 
             await this.props.lottery.methods.enter().send({
-                from: this.props.accountConnected[0],
+                from: this.state.accountConnected,
                 value: this.props.web3.utils.toWei(this.state.value, 'ether')
             });
             this.setState({ 'message': 'Transaction executed' });
         } catch (err) {
             this.setState({ 'message': 'Transaction error =>' + err });
+        }
+    }
+
+    onClick = async () => {
+        try {
+            this.setState({winnerMessage: 'Choosing for a winner'})
+            await this.props.lottery.methods.pickPlayer().call({
+                from: this.state.accountConnected
+            });
+            this.setState({winnerMessage: 'Winner choosed'})
+        }catch (err) {
+            this.setState({winnerMessage: 'ERROR: ' + err})
         }
     }
 
@@ -76,6 +102,11 @@ class ContractComponent extends Component {
                         </div>
                         <button>Enter</button>
                     </form>
+
+                    <hr />
+
+                    {this.state.pickWinnerDiv}
+
                     <p> {this.state.message}</p>
                 </div>
             </>);
