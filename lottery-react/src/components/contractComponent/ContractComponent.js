@@ -13,7 +13,6 @@ class ContractComponent extends Component {
             value: 0,
             message: '',
             winnerMessage: '',
-            pickWinnerDiv:''
         }
     }
 
@@ -22,15 +21,7 @@ class ContractComponent extends Component {
             const manager = await this.props.lottery.methods.manager().call();
             const accountConnected = this.props.accountConnected[0];
             this.setState({ manager });
-            this.setState({ accountConnected})
-            if(manager === accountConnected){
-                const pickWinnerDiv = () =>  {return (<>
-                    <h4> Ready to extract a winner? </h4>
-                    <button onClick={this.onClick}>Pick a winner</button>
-                    <p>{this.state.winnerMessage}</p>
-                </>)}
-                this.setState({pickWinnerDiv: pickWinnerDiv()})
-            }
+            this.setState({ accountConnected })
 
         }
         if (this.props.lottery) {
@@ -59,17 +50,30 @@ class ContractComponent extends Component {
 
     onClick = async () => {
         try {
-            this.setState({winnerMessage: 'Choosing for a winner'})
-            await this.props.lottery.methods.pickPlayer().call({
-                from: this.state.accountConnected
+            this.setState({ winnerMessage: 'Choosing for a winner' });
+            await this.props.lottery.methods.pickPlayer().send({
+                from: this.props.accountConnected[0]
             });
-            this.setState({winnerMessage: 'Winner choosed'})
-        }catch (err) {
-            this.setState({winnerMessage: 'ERROR: ' + err})
+            this.setState({ winnerMessage: 'Winner picked and money transfered' });
+        } catch (err) {
+            this.setState({ winnerMessage: 'ERROR: ' + err })
         }
     }
 
     render() {
+
+        let pickWinnerDiv='';
+        if (this.state.accountConnected === this.state.manager) {
+            pickWinnerDiv = (
+                <div>
+                    <h4> Ready to extract a winner? </h4>
+                    <button onClick={this.onClick}>Pick a winner</button>
+                    <p>{this.state.winnerMessage}</p>
+                </div>
+            );
+        }
+
+
         if (this.props.lottery == null) {
             return (<>
                 <div>
@@ -105,9 +109,10 @@ class ContractComponent extends Component {
 
                     <hr />
 
-                    {this.state.pickWinnerDiv}
-
                     <p> {this.state.message}</p>
+
+                    {pickWinnerDiv}
+
                 </div>
             </>);
 

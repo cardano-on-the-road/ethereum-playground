@@ -51,6 +51,22 @@ describe('Lottery tests', () => {
         assert.equal(players.length, 2);
     });
 
+    it('Balance test end2end', async () => {
+        await lotteryContract.methods.enter().send({
+            from: accounts[0], 
+            value: web3.utils.toWei('2', 'ether')
+        });
+ 
+        const initialBalance = await web3.eth.getBalance(accounts[0]);
+        await lotteryContract.methods.pickPlayer().send({
+            from:accounts[0]
+        });
+        const finalBalance = await web3.eth.getBalance(accounts[0]);
+        const difference = finalBalance - initialBalance;
+
+        assert(difference > web3.utils.toWei('1.8', 'ether'));
+    });
+
     it('Player exception min amount', async () => {
         let error = false;
         try{
