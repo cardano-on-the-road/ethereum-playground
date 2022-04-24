@@ -4,7 +4,9 @@ import AccountDetails from './components/accountDetails/accountDetails';
 import contractInterface from './contractInterface'
 import ContractComponent from './components/contractComponent/ContractComponent';
 import Web3 from 'web3';
+import Home from './components/home/Home';
 //import contractInterfacetery from './contractInterfacetery';
+
 
 class App extends Component {
 
@@ -16,7 +18,8 @@ class App extends Component {
       accountsConnected: [],
       connectionStatus: 'Not connected',
       accountBalance: 0,
-      lottery: null
+      lottery: null,
+      currentChoice: 'home'
     }
 
     console.log(contractInterface.contractAddress, '\n', contractInterface.abi);
@@ -42,14 +45,20 @@ class App extends Component {
     return (
       <>
         <div>
-          <ConnectButton onConnect={(web3 => this.setState({ web3 }))} />
-          <AccountDetails
+          <ConnectButton onConnect={(web3 => this.setState({ web3,currentChoice: 'accountDetails' }))} />
+          {
+            (this.state.currentChoice === 'home') ? 
+            <Home></Home> :
+            <React.Fragment>
+              <AccountDetails
             connectionStatus={this.state.connectionStatus}
             accountBalance={this.state.accountBalance}
             accountConnected={this.state.accountsConnected[0]} />
-          <ContractComponent lottery={this.state.lottery}
+            <ContractComponent lottery={this.state.lottery}
             accountConnected={this.state.accountsConnected}
-            web3={this.state.web3} />
+          web3={this.state.web3} />
+            </React.Fragment>            
+          }
         </div>
       </>
     );

@@ -1,6 +1,7 @@
 .accountBalance-main-div
 {
     display: 'flex';
+    margin-top: 1rem;
     /*background-color: lightblue;*/
     border-radius: 25px;
     height: 20rem;

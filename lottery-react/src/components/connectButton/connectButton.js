@@ -29,7 +29,7 @@ class ConnectButton extends Component {
                         await this.connection();
                         this.props.onConnect(this.web3);
                     }
-                    }> Connect </button>
+                    }> {this.web3 === null ? 'Connect' : 'Disconnect'}  </button>
                 </div>
             </>
         );
