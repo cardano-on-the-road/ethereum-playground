@@ -9,17 +9,10 @@ class AccountDetails extends Component {
             return (
                     <div className="accountBalance-main-div">
                         <div className="accountBalance-main-div-card">
-                            <div>
                                 <p className="accountBalance-div-p"> Account: {this.props.accountConnected} </p>
-                            </div>
-                            <div>
                                 <p className="accountBalance-div-p"> Balance: {this.props.accountBalance} </p>
-                            </div>
-                            <div style={{position:'absolute',marginTop:'140px'}}>
-                                <p className="accountBalance-div-p"> Version: 1.00</p>
-                            </div>
                         </div>
-                        </div>               
+                    </div>               
             );
         }
         else {
