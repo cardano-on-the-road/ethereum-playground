@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import '../../css/accountDetails.css';
+import './accountDetails.css';
 
 class AccountDetails extends Component {
 
@@ -7,13 +7,19 @@ class AccountDetails extends Component {
     render() {
         if (this.props.accountConnected !== '') {
             return (
-                <>
-                    <div style={{backgroundColor: 'orange'}}>
-                        <p> Connection status: {this.props.connectionStatus}</p>
-                        <p> Account: {this.props.accountConnected} </p>
-                        <p> Balance: {this.props.accountBalance} </p>
-                    </div>
-                </>
+                    <div className="accountBalance-main-div">
+                        <div className="accountBalance-main-div-card">
+                            <div>
+                                <p className="accountBalance-div-p"> Account: {this.props.accountConnected} </p>
+                            </div>
+                            <div>
+                                <p className="accountBalance-div-p"> Balance: {this.props.accountBalance} </p>
+                            </div>
+                            <div style={{position:'absolute',marginTop:'140px'}}>
+                                <p className="accountBalance-div-p"> Version: 1.00</p>
+                            </div>
+                        </div>
+                        </div>               
             );
         }
         else {
