@@ -44,7 +44,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <div>
+        <div style={{margin:'2rem'}}>
           <ConnectButton onConnect={(web3 => this.setState({ web3,currentChoice: 'accountDetails' }))} />
           {
             (this.state.currentChoice === 'home') ? 
