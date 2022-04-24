@@ -1,0 +1,30 @@
+.accountBalance-main-div
+{
+    display: 'flex';
+    /*background-color: lightblue;*/
+    border-radius: 25px;
+    height: 20rem;
+    background-repeat: no-repeat;}
+
+.accountBalance-main-div-card
+{
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    background: url("../../images/red-credit-card-edit.jpeg");
+    height: 300px;
+    width: 474px;
+    background-repeat: no-repeat;
+}
+
+.accountBalance-div-p
+{
+    color: white;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+    font-size: small;
+    height: 1.5rem;
+    width: 100%;
+    font-weight: bold;
+    font-size: medium;
+}
