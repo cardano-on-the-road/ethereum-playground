@@ -4,6 +4,9 @@ import contractInterface from './contractInterface'
 import ContractComponent from './components/contractComponent/ContractComponent';
 import Web3 from 'web3';
 import Home from './components/home/Home';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import logo from './images/logo.svg'
 //import contractInterfacetery from './contractInterfacetery';
 
 
@@ -60,7 +63,28 @@ class App extends Component {
   render() {
     return (
       <>
-        <div style={{margin:'2rem'}}>
+     <Navbar bg="dark" variant="dark"
+        sticky="top" expand="sm" collapseOnSelect>
+        <Navbar.Brand>
+          <img src={logo} alt='logo' width="40px" height="40px" />{' '}
+          Lottery is now
+        </Navbar.Brand>
+
+        <Navbar.Toggle className="coloring" />
+        <Navbar.Collapse>
+          <Nav>
+          <Nav.Link href="#Home"  onClick={() => this.setState({currentChoice: 'home'})}>Home</Nav.Link>
+          <Nav.Link href="#MyWallet"  onClick={() => this.setState({currentChoice: 'accountDetails'})}>My Wallet</Nav.Link>
+
+          <NavDropdown title="Account">
+              <NavDropdown.Item href="#logout">Logout</NavDropdown.Item>
+            </NavDropdown>
+            
+          </Nav>
+        </Navbar.Collapse>
+
+      </Navbar>
+        <div style={{marginTop:'4rem',marginLeft:'.5rem'}}>
           {
             (this.state.currentChoice === 'home') ? 
             <Home></Home> :
