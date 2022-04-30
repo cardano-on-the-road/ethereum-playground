@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import ConnectButton from './components/connectButton/connectButton'
+import React, { Component,  } from 'react'
 import AccountDetails from './components/accountDetails/accountDetails';
 import contractInterface from './contractInterface'
 import ContractComponent from './components/contractComponent/ContractComponent';
@@ -19,15 +18,17 @@ class App extends Component {
       connectionStatus: 'Not connected',
       accountBalance: 0,
       lottery: null,
-      currentChoice: 'home'
+      currentChoice: 'home',
+      firstRun: false
     }
 
     console.log(contractInterface.contractAddress, '\n', contractInterface.abi);
   }
 
-  async componentDidMount()
+  async componentDidUpdate()
   {
-    if (window.ethereum) {
+    
+    if (window.ethereum && (this.state.web3 !== null || this.state.web3 !== 'undefined') && this.state.firstRun === true) {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       this.setState({web3: new Web3(window.ethereum)});
 
@@ -42,6 +43,17 @@ class App extends Component {
         lottery: new this.state.web3.eth.Contract(contractInterface.abi, contractInterface.contractAddress)
       });
       console.log('web', this.state.web3, '\nAccount connected', this.state.accountsConnected[0], '\nAccount balance', this.state.accountBalance);
+      this.setState({firstRun: false});
+    }
+  }
+
+  async componentDidMount()
+  {
+    if (window.ethereum) {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      this.setState({web3: new Web3(window.ethereum)});
+      this.setState({firstRun: true});
+     
     }
   }
 
