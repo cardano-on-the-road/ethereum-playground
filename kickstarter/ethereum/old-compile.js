@@ -21,9 +21,11 @@ const input = {
   },
 };
 
+const output = solc.compile(JSON.stringify(input)).contracts;
+console.log(output);
 
-module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
-  'Kickstarter.sol'
-].Campaign;
+// module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
+//   'Kickstarter.sol'
+// ].Campaign;
 
 
