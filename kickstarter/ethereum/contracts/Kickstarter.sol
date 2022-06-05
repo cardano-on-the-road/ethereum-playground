@@ -4,15 +4,25 @@ pragma solidity ^0.8.13;
 
 contract CampaignFactory{
 
-    address[] deployedCampaings;
+    struct deployedCampaing {
+        string name;
+        string description;
+        address cAddress;
+    }
+    deployedCampaing[] deployedCampaings;
 
-    function createCampaign(uint minimumAmount) public {
+    function createCampaign(string memory name, string memory description, uint minimumAmount) public {
 
-        address newCampaign = address(new Campaign(msg.sender, minimumAmount));
-        deployedCampaings.push(newCampaign);
+        address newCampaignAddress = address(new Campaign(msg.sender, minimumAmount));
+        deployedCampaing memory d = deployedCampaing({
+            name: name,
+            description: description,
+            cAddress: newCampaignAddress
+        });
+        deployedCampaings.push(d);
     }
 
-    function getDeployedCampaigns() public view returns(address[] memory){
+    function getDeployedCampaigns() public view returns(deployedCampaing[] memory){
         return deployedCampaings;
     }
 
@@ -23,7 +33,7 @@ contract Campaign {
     struct Request {
         string description;
         uint256 value;
-        address recipient;
+        address payable recipient;
         bool completed;
         uint256 approvalCount;
         mapping(address => bool) approvals;
@@ -32,6 +42,7 @@ contract Campaign {
 
     address public manager;
     uint256 public minimumContribution;
+    string[] public requestNames;
     mapping(address => bool) public approvers;
     uint256 public approverCount;
 
@@ -47,7 +58,7 @@ contract Campaign {
     }
 
     function contribute() public payable {
-        require(msg.value >= minimumContribution);
+        require(msg.value >= minimumContribution, "not enough money");
         approvers[msg.sender] = true;
         approverCount ++;
     }
@@ -56,9 +67,10 @@ contract Campaign {
         string memory name,
         string memory description,
         uint256 value,
-        address recipient
+        address payable recipient
     ) public restricted {
         Request storage r = requests[name];
+        requestNames.push(name);
         r.description = description;
         r.value = value;
         r.recipient = recipient;
@@ -75,5 +87,15 @@ contract Campaign {
             r.approvals[msg.sender]= true;
             r.approvalCount++;
         }
+    }
+
+    function finalizeRequest(string memory name) public payable restricted{
+        Request storage r = requests[name];
+        require(r.approvalCount > (approverCount / 2), "No enough approvals");
+        require(!r.completed, "completed yet");
+
+        r.recipient.transfer(r.value);
+        r.completed=true;
+
     }
 }

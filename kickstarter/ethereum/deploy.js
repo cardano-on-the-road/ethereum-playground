@@ -1,9 +1,14 @@
+
+const fs = require("fs-extra");
+const path = require("path");
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const Web3 = require('web3');
 const configuration = require('./confReader')
 
-// the interface is the ABI
-const { abi, evm } = require('./compile');
+const campaignFactoryBuild = fs.readJSONSync(
+    path.resolve(__dirname, '../ethereum', 'build', 'CampaignFactory.json')
+)
+
 
 const provider = new HDWalletProvider(
     configuration.wallet_passphrase,
@@ -17,14 +22,13 @@ const deploy = async () => {
 
     console.log('Attempting to deploy from account', accounts[0]);
 
-    depolyResult = await new web3.eth.Contract(abi)
+    depolyResult = await new web3.eth.Contract(campaignFactoryBuild.abi)
         .deploy({
-            data: evm.bytecode.object,
+            data: campaignFactoryBuild.evm.bytecode.object,
         })
-        .send({ from: accounts[0], gas: '1000000' });
+        .send({ from: accounts[0], gas: '3000000' });
 
     console.log('Contract deployed at: ', depolyResult.options.address);
-    console.log('ABI: \n', abi);
     provider.engine.stop();
 };
 

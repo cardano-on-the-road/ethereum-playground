@@ -45,31 +45,32 @@ beforeEach(async () => {
             data: campaignBuild.evm.bytecode.object,
             arguments: [manager, web3.utils.toWei("0.01", "ether")]
         })
-        .send({from: manager, gas: '1000000'});
+        .send({from: manager, gas: '4000000'});
 
     kickFactoryContract = await new web3.eth.Contract(campaignFactoryBuild.abi)
         .deploy({
             data: campaignFactoryBuild.evm.bytecode.object,
         })
-        .send({from: manager, gas: '3000000'});
+        .send({from: manager, gas: '4000000'});
 
     await kickContract.methods.createRequest(REQUEST_NAME, "Request description", REQUEST_VALUE, supplier).send({
         from: manager,
-        gas: '1000000'
+        gas: '4000000'
     });
 });
 
 describe('Campaign factory', async () => {
 
     it('Campaign deploy and test', async () => {
-        await kickFactoryContract.methods.createCampaign('100').send({
+        await kickFactoryContract.methods.createCampaign('Campaign','Campaign description','100').send({
             from: manager,
-            gas:'1000000'
+            gas:'3000000'
         });
         const campaigns = await kickFactoryContract.methods.getDeployedCampaigns().call();
+
         const campaignContract = await new web3.eth.Contract(
             campaignBuild.abi,
-            campaigns[0]
+            campaigns[0].cAddress
         );
         const ris = await campaignContract.methods.manager().call();
         assert.equal(ris, manager);
@@ -80,7 +81,7 @@ describe('Campaign factory', async () => {
 describe('Kickstarter deploy tests', async () => {
  
     it('deploy contract', () => {
-        assert(kickContract.options.address);
+        assert.ok(kickContract.options.address);
     });    
 });
 
