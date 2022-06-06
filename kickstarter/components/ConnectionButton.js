@@ -22,7 +22,7 @@ function ConnectionButton(props) {
     if (!props.connection.status) {
         return (
         <>
-            <div>
+            <div className="connectionButton">
                 <button onClick={() => props.onClick(web3Connection)}>
                     Connect
                 </button>
@@ -32,7 +32,7 @@ function ConnectionButton(props) {
     else{
         return (
         <>
-            <div>
+            <div className="connectionButton">
                 <label>Wallet addr: {props.connection.wallet}</label>
                 <button onClick={() => props.onClick(web3Disconnect)}>
                     disconnect

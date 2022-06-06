@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import ConnectionButton from "../components/ConnectionButton";
 import CardList from "../components/CardList";
-import settings from "../ethereum/settings.json"
 import instance from "../ethereum/factory";
 
 
@@ -46,27 +45,36 @@ function index() {
 
 
     const loadCampaigns = async () => {
-        let campaigns = await connection.campaignFactoryContract.methods.getDeployedCampaigns().call() 
-        setCampaigns(campaigns);
+        if(connection.status){
+            let campaigns = await connection.campaignFactoryContract.methods.getDeployedCampaigns().call() 
+            setCampaigns(campaigns);
+        }
     }
 
     useEffect(() => {
             if (connection.web3){
                 loadCampaigns();
             }
-    }, [campaigns]); 
+    }, [connection]); 
 
-    return (
-        <>
-            <h1> Campaigns list </h1>
-            <div>
-                <ConnectionButton connection={connection} onClick={clickConnectionButton} />
-            </div>
-            <div>
-                <CardList list={campaigns}/>
-            </div>
-        </>
-    );
+    if(connection.status)
+        return (
+            <>   
+                <div>
+                    <ConnectionButton connection={connection} onClick={clickConnectionButton} />
+                </div>
+                <div>
+                    <h1> Campaigns list </h1>
+                    <CardList list={campaigns}/>
+                </div>
+            </>
+        );
+    else 
+            return (
+                <div>
+                    <ConnectionButton connection={connection} onClick={clickConnectionButton} />
+                </div>
+            )
 }
 
 

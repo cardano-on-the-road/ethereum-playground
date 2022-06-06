@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.css'
+import styles from './'
+
 
 function CardList(props) {
 
     const [list, setList] = useState([]);
 
-    useEffect(() => {
+    const createList = async () => {
         if (Array.isArray(props.list)) {
-            setList(props.list.map((item) => {
-                <li>
-                    <p>item.name</p>
-                    <p>item.description</p>
-                    <p>item.cAddress</p>
-                </li>
-            }));
+            console.log(props.list)
+            const l = props.list.map((item) => 
+                <>
+                    <div className={styles.card-item} key={item.cAddress}>
+                        <h5 className="card-title">{item.name}</h5>
+                        <h6 className="card-subtitle">{item.description}</h6>
+                        <p className="card-text">{item.cAddress}</p>
+                    </div>
+                </>
+            );
+            setList(l);
         }
-    }, [props?.list]);
+    }
+
+    useEffect(() => {
+        createList();
+
+    },[props?.list]);
 
     return (
-        <div>
+        <div className="card">
             <ul>
                 {list}
             </ul>
