@@ -1,5 +1,8 @@
 import React, { Component, useState } from "react";
 import Web3 from "web3";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 
 
@@ -21,62 +24,33 @@ function ConnectionButton(props) {
 
     if (!props.connection.status) {
         return (
-        <>
-            <div className="connectionButton">
-                <button onClick={() => props.onClick(web3Connection)}>
-                    Connect
-                </button>
-            </div>
-        </>);
+            <>
+
+                <Stack
+                    direction="row"
+                    spacing={3}
+                    justifyContent="right"
+                    alignItems="center">
+                    <Button onClick={() => props.onClick(web3Connection)} variant="contained">Connect</Button>
+                </Stack>
+
+            </>);
     }
-    else{
+    else {
         return (
-        <>
-            <div className="connectionButton">
-                <label>Wallet addr: {props.connection.wallet}</label>
-                <button onClick={() => props.onClick(web3Disconnect)}>
-                    disconnect
-                </button>
-            </div>
-        </>);
+            <>
+
+                <Stack
+                    direction="row"
+                    spacing={3}
+                    justifyContent="right"
+                    alignItems="center">
+                    <Typography variant="h5"> Wallet addr: {props.connection.wallet} </Typography>
+                    <Button onClick={() => props.onClick(web3Disconnect)} variant="contained">Disconnect</Button>
+                </Stack>
+            </>);
     }
 
 }
 
 export default ConnectionButton;
-
-// class ConnectButton extends Component {
-
-//     constructor() {
-//         super();
-//         this.web3 = null;
-//     }
-
-//     async connection() {
-
-//         if (window.ethereum) {
-//             await window.ethereum.request({ method: 'eth_requestAccounts' });
-//             this.web3 = new Web3(window.ethereum);
-//         } else {
-//             // Show alert if Ethereum provider is not detected
-//             alert("Please install Metamask");
-//         }
-//         //return "Bottone cliccato"
-//     }
-
-//     render() {
-//         return (
-//             <>
-//                 <div>
-//                     <button onClick={async () => {
-//                         await this.connection();
-//                         this.props.onConnect(this.web3);
-//                     }
-//                     }> Connect </button>
-//                 </div>
-//             </>
-//         );
-//     }
-// }
-
-// export default ConnectButton;

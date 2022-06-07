@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from './'
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 
 function CardList(props) {
@@ -9,13 +14,25 @@ function CardList(props) {
     const createList = async () => {
         if (Array.isArray(props.list)) {
             console.log(props.list)
-            const l = props.list.map((item) => 
+            const l = props.list.map((item) =>
                 <>
-                    <div className={styles.card-item} key={item.cAddress}>
-                        <h5 className="card-title">{item.name}</h5>
-                        <h6 className="card-subtitle">{item.description}</h6>
-                        <p className="card-text">{item.cAddress}</p>
-                    </div>
+                    <Box sx={{ minWidth: 275 }}>
+                        <Card variant="outlined">
+                            <React.Fragment>
+                                <CardContent>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        {item.name}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        {item.description}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small">{item.cAddress}</Button>
+                                </CardActions>
+                            </React.Fragment>
+                        </Card>
+                    </Box>
                 </>
             );
             setList(l);
@@ -25,7 +42,7 @@ function CardList(props) {
     useEffect(() => {
         createList();
 
-    },[props?.list]);
+    }, [props?.list]);
 
     return (
         <div className="card">
