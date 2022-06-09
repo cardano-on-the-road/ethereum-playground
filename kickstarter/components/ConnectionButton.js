@@ -45,7 +45,7 @@ function ConnectionButton(props) {
                     spacing={3}
                     justifyContent="right"
                     alignItems="center">
-                    <Typography variant="h5"> Wallet addr: {props.connection.wallet} </Typography>
+                    <Typography variant="h6"> Wallet addr: {props.connection.wallet} </Typography>
                     <Button onClick={() => props.onClick(web3Disconnect)} variant="contained">Disconnect</Button>
                 </Stack>
             </>);
