@@ -1,70 +1,53 @@
 import { Grid, Box, AppBar, Toolbar, Typography, Container, Stack } from '@mui/material';
 import React from 'react';
 import ConnectionButton from './ConnectionButton';
-import { useEffect, useState } from 'react';
-import instance from '../ethereum/factory';
+import { useEffect, useState, useContext } from 'react';
+import CampaignFactoryInstance from '../ethereum/factory';
+import { GlobalContext } from './GlobalContext';
 
 
 
 const Header = () => {
 
-    const [connection, setConnection] = useState({
-        status: false,
-        wallet: '',
-        web3Obj: null,
-        campaignFactoryContract: null
-    });
 
-    const [campaigns, setCampaigns] = useState([]);
-    //verify is the web3 is stored in the cookie
+    const {state, setState} = useContext(GlobalContext);
 
-    const storageEventHandler = e => {
-        console.log('event triggered')
-    }
+    //Insert reducer
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-
-        }
-        console.log('Event listner');
-        window.addEventListener("storage", storageEventHandler);
-        return () => {
-            // Remove the handler when the component unmounts
-            window.removeEventListener("storage", storageEventHandler);
-        };
-    }, []);
+        console.log('Loading header')
+        // Check if wallet connection from storage
+    }, [])
 
 
     const clickConnectionButton = async (web3callback) => {
         //web3connection is a callback from ConnectionButton
         let web3 = await web3callback();
         console.log('ConnectionButton clicked');
+
         if (web3) {
             let account = await web3.eth.getAccounts();
-            //Security issue here in the settings file
-            let campaignFactoryContract = await instance(web3);
-            let newConnection = {
-                status: true,
+            let campaignFactoryInstance = await CampaignFactoryInstance(web3);
+            let newState = {
+                isConnected: true,
                 wallet: account[0],
-                web3Obj: web3,
-                campaignFactoryContract: campaignFactoryContract
+                web3:web3,
+                campaignFactoryInstance: campaignFactoryInstance
             }
-            setConnection(newConnection);
-
-            console.log("web3", web3);
-            localStorage.setItem("campaignFactory", "test campaign factory");
+            setState(newState);
+            localStorage.setItem("isConnected", true);
+            localStorage.setItem("wallet", account[0]);
         }
         else {
-            setConnection({
-                status: false,
+            setState({
+                isConnected: false,
                 wallet: '',
-                web3Obj: null,
-                campaignContract: null
+                web3: undefined,
+                campaignFactoryInstance: undefined
             });
-            localStorage.setItem("web3", null);
+            localStorage.setItem("isConnected", false);
+            localStorage.removeItem("wallet");
         }
-        localStorage.setItem("test", 'Trigger test');
-
     }
 
 
@@ -88,7 +71,7 @@ const Header = () => {
                     <Grid item
                         justify="flex-end"
                         xs={10}>
-                        <ConnectionButton connection={connection} onClick={clickConnectionButton} />
+                        <ConnectionButton connection={state} onClick={clickConnectionButton} />
                     </Grid>
                 </Grid>
             </Toolbar>

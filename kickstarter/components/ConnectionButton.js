@@ -22,7 +22,7 @@ function ConnectionButton(props) {
         return await null;
     }
 
-    if (!props.connection.status) {
+    if (!props.connection?.isConnected) {
         return (
             <>
 

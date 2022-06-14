@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "./Header"
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Stack, Container, Box } from "@mui/material";
+import Footer from "./Footer";
 
 const darkTheme = createTheme({
     palette: {
@@ -12,20 +13,18 @@ const darkTheme = createTheme({
 
 function Layout(props) {
 
+
+
     return (
         <>
             <ThemeProvider theme={darkTheme}>
-                    
-                    <Header/>
+                    <Header />
 
                     <Container maxWidth="xl">
-                    {props.children}
+                        {props.children}
                     </Container>
-                    
-                    <Container maxWidth="xl">
-                        Footer
-                    </Container>
-                
+
+                    <Footer />
             </ThemeProvider>
         </>
     );
